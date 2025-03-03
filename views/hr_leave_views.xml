@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add review state to statusbar -->
+            <field name="state" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="options">{'clickable': True}</attribute>
+                <attribute name="statusbar_visible">draft,in_review,confirm,validate</attribute>
+            </field>
+
+            <!-- Add technical fields -->
+            <field name="can_approve" position="after">
+                <field name="can_review" invisible="1"/>
+                <field name="leave_reviewer_id" invisible="1"/>
+            </field>
+
+            <!-- Add Review button -->
+            <button name="action_confirm" position="before">
+                <button string="Review" 
+                        name="action_review" 
+                        type="object" 
+                        class="oe_highlight"
+                        attrs="{'invisible': [('can_review', '=', False)]}"
+                        groups="dh_leave_mgt.group_hr_holidays_reviewer"/>
+            </button>
+
+            <!-- Modify Confirm button -->
+            <button name="action_confirm" position="attributes">
+                <attribute name="states">in_review</attribute>
+                <attribute name="string">Submit</attribute>
+            </button>
+        </field>
+    </record>
+
+    <record id="hr_leave_view_form_manager_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.view.form.manager.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
+        <field name="arch" type="xml">
+            <field name="state" position="attributes">
+                <attribute name="statusbar_visible">draft,in_review,confirm,validate,refuse</attribute>
+            </field>
+
+            <button name="action_approve" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('can_approve', '=', False), ('state', 'not in', ['confirm'])]}</attribute>
+            </button>
+        </field>
+    </record>
+</odoo>
