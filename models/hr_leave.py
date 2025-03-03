@@ -4,7 +4,14 @@ from odoo.exceptions import UserError
 class HrLeave(models.Model):
     _inherit = "hr.leave"
 
-    state = fields.Selection(selection_add=[('in_review', 'In-Review')])
+    state = fields.Selection([
+        ('draft', 'To Submit'),
+        ('confirm', 'To Approve'),
+        ('in_review', 'In Review'),
+        ('validate', 'Approved'),
+        ('refuse', 'Refused'),
+        ('cancel', 'Cancelled')
+    ], string='Status', default='draft', tracking=True, copy=False)
 
     leave_reviewer_id = fields.Many2one(
         'res.users',
@@ -12,21 +19,21 @@ class HrLeave(models.Model):
         help="Person responsible for reviewing leave requests",
         related="employee_id.leave_reviewer_id",
         store=True,
-        readonly=False
+        readonly=False,
+        tracking=True
     )
 
     can_review = fields.Boolean(
         string='Can Review',
         compute='_compute_can_review',
-        store=False,
+        help="Technical field used to determine if user can review the leave"
     )
 
     @api.depends('leave_reviewer_id', 'state')
     def _compute_can_review(self):
-        """Compute if current user can review the leave request"""
         for leave in self:
             leave.can_review = (
-                leave.state == 'draft' and 
+                leave.state in ['draft', 'confirm'] and 
                 leave.leave_reviewer_id and 
                 leave.leave_reviewer_id.id == self.env.uid and
                 self.env.user.has_group('dh_leave_mgt.group_hr_holidays_reviewer')
@@ -36,13 +43,27 @@ class HrLeave(models.Model):
         self.ensure_one()
         if not self.can_review:
             raise UserError(_("You are not authorized to review this leave request."))
-        if self.state != 'draft':
-            raise UserError(_("Only draft leaves can be reviewed."))
         self.write({'state': 'in_review'})
+        if self.employee_id.user_id.partner_id:
+            self.message_post(
+                body=_("Leave request is under review."),
+                partner_ids=[self.employee_id.user_id.partner_id.id]
+            )
         return True
 
-    def action_confirm(self):
-        for leave in self:
-            if leave.state != 'in_review':
-                raise UserError(_("Leave must be reviewed before submitting."))
-        return super(HrLeave, self).action_confirm()
+    def action_validate(self):
+        self.ensure_one()
+        if self.state != 'in_review':
+            raise UserError(_("Only reviewed leaves can be approved."))
+        self.write({'state': 'validate'})
+        return True
+
+    def action_refuse(self):
+        self.ensure_one()
+        self.write({'state': 'refuse'})
+        return True
+
+    def action_cancel(self):
+        self.ensure_one()
+        self.write({'state': 'cancel'})
+        return True
