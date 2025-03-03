@@ -14,7 +14,7 @@ class HrLeave(models.Model):
         tracking=True
     )
 
-    def action_validate1(self):
+    def action_approve(self):
         if not (self.leave_reviewer_id.id == self.env.uid and 
                 self.env.user.has_group('dh_leave_mgt.group_hr_holidays_reviewer')):
             raise UserError(_("You are not authorized to review this leave request."))
@@ -23,7 +23,8 @@ class HrLeave(models.Model):
                 body=_("Leave request is under review."),
                 partner_ids=[self.employee_id.user_id.partner_id.id]
             )
-        return super(HrLeave, self).action_validate1()
+        self.write({'state': 'validate1'})
+        return True
 
     def action_validate(self):
         if self.state != 'validate1':
