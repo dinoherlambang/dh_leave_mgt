@@ -6,41 +6,28 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
             <field name="state" position="attributes">
-                <attribute name="statusbar_visible">draft,confirm,in_review,validate</attribute>
+                <attribute name="statusbar_visible">draft,confirm,validate1,validate</attribute>
             </field>
 
-            <field name="can_approve" position="after">
-                <field name="can_review" invisible="1"/>
+            <field name="holiday_status_id" position="after">
                 <field name="leave_reviewer_id" groups="hr_holidays.group_hr_holidays_user"/>
             </field>
 
-            <header position="inside">
-                <button name="action_review" 
-                        string="Review" 
-                        type="object" 
-                        class="oe_highlight"
-                        attrs="{'invisible': ['|', ('can_review', '=', False), ('state', 'not in', ['draft', 'confirm'])]}"
-                        groups="dh_leave_mgt.group_hr_holidays_reviewer"/>
-                
-                <button name="action_validate" 
-                        string="Approve" 
-                        type="object" 
-                        class="oe_highlight"
-                        attrs="{'invisible': [('state', '!=', 'in_review')]}"
-                        groups="hr_holidays.group_hr_holidays_user"/>
-                
-                <!-- <button name="action_refuse" 
-                        string="Refuse" 
-                        type="object"
-                        attrs="{'invisible': [('state', 'in', ['refuse', 'cancel'])]}"
-                        groups="hr_holidays.group_hr_holidays_user"/> -->
-                
-                <button name="action_cancel" 
-                        string="Cancel" 
-                        type="object"
-                        attrs="{'invisible': [('state', 'in', ['refuse', 'cancel'])]}"
-                        groups="hr_holidays.group_hr_holidays_user"/>
-            </header>
+            <button name="action_approve" position="attributes">
+                <attribute name="string">Review</attribute>
+                <attribute name="groups">dh_leave_mgt.group_hr_holidays_reviewer</attribute>
+            </button>
+        </field>
+    </record>
+
+    <record id="hr_leave_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.tree.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="leave_reviewer_id"/>
+            </field>
         </field>
     </record>
 </odoo>
