@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'views/hr_employee_views.xml',
         'views/hr_leave_views.xml',
+        'views/leave_menu.xml',
     ],
     'installable': True,
     'application': False,
