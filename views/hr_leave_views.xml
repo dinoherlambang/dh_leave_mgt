@@ -39,5 +39,18 @@
         <field name="view_id" ref="hr_holidays.hr_leave_view_calendar"/>
     </record>
 
+    <record id="action_hr_leave_report" model="ir.actions.act_window">
+        <field name="name">Leave Analysis</field>
+        <field name="res_model">hr.leave.report</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{
+            'pivot_measures': ['__count'],
+            'pivot_column_groupby': ['date_to:month'],
+            'pivot_row_groupby': ['department_id', 'employee_id']
+        }</field>
+    </record>
+
+
+
 
 </odoo>

@@ -25,5 +25,20 @@
         parent="menu_hr_leave_management"
         sequence="3"/>
 
+    <menuitem
+        id="menu_hr_leave_reporting"
+        name="Reporting"
+        parent="menu_hr_leave_management"
+        sequence="99"/>
+
+    <menuitem
+        id="menu_hr_leave_report_by_employee"
+        name="By Employee"
+        parent="menu_hr_leave_reporting"
+        action="action_hr_leave_report"
+        sequence="1"/>
+
+
+
 
 </odoo>
