@@ -14,9 +14,16 @@
         sequence="1"/>
 
     <menuitem id="menu_custom_hr_leave"
-          name="Employee Leaves"
-          action="action_custom_leave"
-          parent="menu_hr_leave_management"
-          sequence="2"/>
+        name="Employee Leaves"
+        action="action_custom_leave"
+        parent="menu_hr_leave_management"
+        sequence="2"/>
+
+    <menuitem id="menu_custom_hr_leave_calendar"
+        name="Leave Calendar"
+        action="action_custom_leave_calendar"
+        parent="menu_hr_leave_management"
+        sequence="3"/>
+
 
 </odoo>
