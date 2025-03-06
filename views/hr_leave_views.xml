@@ -39,18 +39,34 @@
         <field name="view_id" ref="hr_holidays.hr_leave_view_calendar"/>
     </record>
 
-    <record id="action_hr_leave_report" model="ir.actions.act_window">
+    <!-- <record id="action_hr_leave_report" model="ir.actions.act_window">
         <field name="name">Leave Analysis</field>
         <field name="res_model">hr.leave.report</field>
         <field name="view_mode">pivot,graph</field>
+        <field name="domain">[
+            ["holiday_status_id.active","=",True]],
+            ["holiday_status_id.active", "=", True],
+            ["employee_id.active", "=", True]
+        
+        </field>
         <field name="context">{
-            'pivot_measures': ['__count'],
-            'pivot_column_groupby': ['date_to:month'],
-            'pivot_row_groupby': ['department_id', 'employee_id']
+            'pivot_measures': ['number_of_days'],
+            'pivot_column_groupby': ['date_from'],
+            'pivot_row_groupby': ['employee_id', 'holiday_status_id'],
+            'pivot_computed_measures': [],
+            'group_by': ['employee_id', 'holiday_status_id']
         }</field>
+    </record> -->
+
+
+
+
+
+    <record id="action_hr_leave_allocation" model="ir.actions.act_window">
+        <field name="name">Leave Allocation</field>
+        <field name="res_model">hr.leave.allocation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_holidays.hr_leave_allocation_view_tree"/>
     </record>
-
-
-
 
 </odoo>

@@ -19,23 +19,43 @@
         parent="menu_hr_leave_management"
         sequence="2"/>
 
-    <menuitem id="menu_custom_hr_leave_calendar"
-        name="Leave Calendar"
-        action="action_custom_leave_calendar"
-        parent="menu_hr_leave_management"
-        sequence="3"/>
-
     <menuitem
         id="menu_hr_leave_reporting"
         name="Reporting"
         parent="menu_hr_leave_management"
-        sequence="99"/>
+        sequence="31"/>
+
+    <!-- <menuitem
+        id="menu_hr_leave_report_by_employee"
+        name="By Employee"
+        parent="menu_hr_leave_reporting"
+        action="action_hr_leave_report"
+        sequence="1"/> -->
 
     <menuitem
         id="menu_hr_leave_report_by_employee"
         name="By Employee"
         parent="menu_hr_leave_reporting"
-        action="action_hr_leave_report"
+        action="hr_holidays.action_hr_available_holidays_report"
+        sequence="1"/>
+
+    <menuitem id="menu_custom_hr_leave_calendar"
+        name="Leave Calendar"
+        action="action_custom_leave_calendar"
+        parent="menu_hr_leave_reporting"
+        sequence="3"/>
+
+     <menuitem
+        id="menu_hr_leave_configuration"
+        name="Configuration" 
+        parent="menu_hr_leave_management"
+        sequence="33"/>
+
+    <menuitem
+        id="menu_hr_leave_allocation"
+        name="Leave Allocation"
+        parent="menu_hr_leave_configuration" 
+        action="action_hr_leave_allocation"
         sequence="1"/>
 
 
