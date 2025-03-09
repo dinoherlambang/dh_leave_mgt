@@ -51,6 +51,12 @@ class HrLeave(models.Model):
     #     states[1] = ('validate1', _('In-Review'))
     #     return states
 
+    # @api.depends('date_from', 'date_to')
+    # def _compute_number_of_days(self):
+    #     for record in self:
+    #         super(HrLeave, self)._compute_number_of_days()
+    #         record.number_of_days = round(record.number_of_days)
+
     def action_approve(self):
         if not (self.leave_reviewer_id.id == self.env.uid and 
                 self.env.user.has_group('dh_leave_mgt.group_hr_holidays_reviewer')):
